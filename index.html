@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CreditAI - Credit Card Approval Prediction</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+
+background:#0D1117;
+color:white;
+overflow-x:hidden;
+
+}
+
+/* Scroll Bar */
+
+::-webkit-scrollbar{
+width:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#111827;
+}
+
+::-webkit-scrollbar-thumb{
+background:#2563EB;
+border-radius:20px;
+}
+
+/* Navbar */
+
+nav{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+padding:18px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+background:rgba(17,24,39,.95);
+
+backdrop-filter:blur(10px);
+
+z-index:1000;
+
+box-shadow:0 5px 20px rgba(0,0,0,.4);
+
+}
+
+.logo{
+
+font-size:28px;
+font-weight:700;
+color:#60A5FA;
+
+}
+
+.logo i{
+
+margin-right:8px;
+
+}
+
+nav ul{
+
+display:flex;
+list-style:none;
+
+}
+
+nav ul li{
+
+margin-left:30px;
+
+}
+
+nav ul li a{
+
+text-decoration:none;
+color:white;
+font-size:16px;
+transition:.3s;
+
+}
+
+nav ul li a:hover{
+
+color:#3B82F6;
+
+}
+
+/* Hero */
+
+.hero{
+
+padding-top:150px;
+padding-bottom:90px;
+text-align:center;
+
+background:linear-gradient(180deg,#111827,#0D1117);
+
+}
+
+.hero h1{
+
+font-size:60px;
+margin-bottom:20px;
+
+}
+
+.hero span{
+
+color:#3B82F6;
+
+}
+
+.hero p{
+
+width:75%;
+margin:auto;
+font-size:18px;
+line-height:1.8;
+color:#9CA3AF;
+
+}
+
+.btn{
+
+display:inline-block;
+margin-top:40px;
+
+padding:15px 40px;
+
+background:#2563EB;
+
+color:white;
+
+border-radius:10px;
+
+text-decoration:none;
+
+transition:.3s;
+
+font-weight:600;
+
+}
+
+.btn:hover{
+
+background:#1D4ED8;
+
+transform:translateY(-3px);
+
+}
+
+/* Section */
+
+.section{
+
+width:90%;
+max-width:1200px;
+margin:auto;
+padding:80px 0;
+
+}
+
+.title{
+
+font-size:40px;
+text-align:center;
+margin-bottom:50px;
+color:#60A5FA;
+
+}
+
+/* Dashboard */
+
+.dashboard{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+gap:25px;
+
+}
+
+/* Cards */
+
+.card{
+
+background:#161B22;
+
+padding:30px;
+
+border-radius:20px;
+
+border:1px solid #30363D;
+
+transition:.4s;
+
+box-shadow:0 8px 20px rgba(0,0,0,.25);
+
+}
+
+.card:hover{
+
+transform:translateY(-10px);
+
+border-color:#2563EB;
+
+}
+
+.card i{
+
+font-size:45px;
+
+color:#3B82F6;
+
+margin-bottom:20px;
+
+}
+
+.card h2{
+
+font-size:34px;
+
+margin:10px 0;
+
+}
+
+.card p{
+
+color:#9CA3AF;
+
+font-size:15px;
+
+}
+
+/* Form */
+
+.form-box{
+
+margin-top:50px;
+
+background:#161B22;
+
+padding:40px;
+
+border-radius:20px;
+
+border:1px solid #30363D;
+
+box-shadow:0 10px 25px rgba(0,0,0,.3);
+
+}
+
+.form-grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:20px;
+
+}
+
+.form-group{
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+label{
+
+margin-bottom:8px;
+
+font-weight:500;
+
+}
+
+input,select{
+
+padding:14px;
+
+background:#21262D;
+
+border:1px solid #30363D;
+
+border-radius:8px;
+
+color:white;
+
+font-size:15px;
+
+outline:none;
+
+transition:.3s;
+
+}
+
+input:focus,
+select:focus{
+
+border-color:#2563EB;
+
+box-shadow:0 0 10px rgba(37,99,235,.3);
+
+}
+
+button{
+
+margin-top:30px;
+
+width:100%;
+
+padding:16px;
+
+font-size:18px;
+
+background:#2563EB;
+
+color:white;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+transition:.3s;
+
+font-weight:600;
+
+}
+
+button:hover{
+
+background:#1D4ED8;
+
+transform:translateY(-3px);
+
+}
+
+/* Loading */
+
+.loader{
+
+display:none;
+
+margin-top:25px;
+
+text-align:center;
+
+}
+
+.spinner{
+
+width:60px;
+height:60px;
+
+border:6px solid #30363D;
+
+border-top:6px solid #3B82F6;
+
+border-radius:50%;
+
+margin:auto;
+
+animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+/* Result */
+
+.result{
+
+display:none;
+
+margin-top:40px;
+
+background:#111827;
+
+padding:30px;
+
+border-radius:20px;
+
+border:1px solid #30363D;
+
+}
+
+.result h2{
+
+color:#22C55E;
+
+margin-bottom:20px;
+
+}
+
+.result p{
+
+margin:12px 0;
+
+font-size:18px;
+
+}
+
+/* Progress */
+
+.progress{
+
+width:100%;
+
+height:18px;
+
+background:#30363D;
+
+border-radius:30px;
+
+overflow:hidden;
+
+margin-top:10px;
+
+}
+
+.bar{
+
+height:100%;
+
+width:0%;
+
+background:#22C55E;
+
+transition:1.2s;
+
+}
+
+/* About */
+
+.about-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+gap:30px;
+
+}
+
+.about-card{
+
+background:#161B22;
+
+padding:30px;
+
+border-radius:20px;
+
+border:1px solid #30363D;
+
+transition:.3s;
+
+}
+
+.about-card:hover{
+
+transform:translateY(-10px);
+
+border-color:#2563EB;
+
+}
+
+.about-card h3{
+
+margin-bottom:15px;
+
+color:#60A5FA;
+
+}
+
+.about-card p{
+
+line-height:1.8;
+
+color:#9CA3AF;
+
+}
+
+/* Footer */
+
+footer{
+
+background:#111827;
+
+padding:40px;
+
+margin-top:80px;
+
+text-align:center;
+
+color:#9CA3AF;
+
+}
+
+footer h3{
+
+color:white;
+
+margin-bottom:10px;
+
+}
+
+/* Mobile */
+
+@media(max-width:900px){
+
+.hero h1{
+
+font-size:42px;
+
+}
+
+.hero p{
+
+width:90%;
+
+}
+
+.form-grid{
+
+grid-template-columns:1fr;
+
+}
+
+nav{
+
+padding:15px;
+
+}
+
+nav ul{
+
+display:none;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+<!-- ================= NAVIGATION ================= -->
+
+<nav>
+
+    <div class="logo">
+        <i class="fa-solid fa-building-columns"></i>
+        CreditAI
+    </div>
+
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#prediction">Prediction</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <h1>
+        AI Powered
+        <span>Credit Card Approval</span>
+    </h1>
+
+    <p>
+
+        Predict credit card approval using Artificial Intelligence and
+        Machine Learning. This system analyzes applicant financial
+        information and determines whether the customer is eligible
+        for a credit card using Logistic Regression, Decision Tree,
+        Random Forest and XGBoost.
+
+    </p>
+
+    <a href="#prediction" class="btn">
+        Check Eligibility
+    </a>
+
+</section>
+
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section class="section" id="dashboard">
+
+<h1 class="title">
+
+Dashboard
+
+</h1>
+
+<div class="dashboard">
+
+<div class="card">
+
+<i class="fa-solid fa-users"></i>
+
+<h2 id="applicants">
+
+25,642
+
+</h2>
+
+<p>
+
+Total Applications
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-circle-check"></i>
+
+<h2 id="approved">
+
+18,932
+
+</h2>
+
+<p>
+
+Approved Applications
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+<h2 id="rejected">
+
+6,710
+
+</h2>
+
+<p>
+
+Rejected Applications
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<h2 id="accuracy">
+
+98.42%
+
+</h2>
+
+<p>
+
+Model Accuracy
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="section">
+
+<h1 class="title">
+
+System Features
+
+</h1>
+
+<div class="dashboard">
+
+<div class="card">
+
+<i class="fa-solid fa-brain"></i>
+
+<h3>
+
+Machine Learning
+
+</h3>
+
+<br>
+
+<p>
+
+Uses Logistic Regression,
+Decision Tree,
+Random Forest
+and XGBoost algorithms.
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-bolt"></i>
+
+<h3>
+
+Instant Prediction
+
+</h3>
+
+<br>
+
+<p>
+
+Predicts approval
+within seconds
+using trained AI models.
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+<h3>
+
+Risk Analysis
+
+</h3>
+
+<br>
+
+<p>
+
+Detects high-risk
+customers based on
+credit history.
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-cloud"></i>
+
+<h3>
+
+Cloud Ready
+
+</h3>
+
+<br>
+
+<p>
+
+Ready for IBM Watson
+Machine Learning
+deployment.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+
+<!-- ================= PREDICTION ================= -->
+
+<section class="section" id="prediction">
+
+<h1 class="title">
+
+Credit Card Eligibility
+
+</h1>
+
+<div class="form-box">
+
+<form id="predictionForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Age</label>
+
+<input
+type="number"
+id="age"
+placeholder="Enter Age"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Gender</label>
+
+<select id="gender">
+
+<option value="">Select</option>
+
+<option value="1">Male</option>
+
+<option value="0">Female</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Annual Income (₹)</label>
+
+<input
+type="number"
+id="income"
+placeholder="Annual Income"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Employment Type</label>
+
+<select id="employment">
+
+<option value="">Select</option>
+
+<option value="0">Working</option>
+
+<option value="1">Business</option>
+
+<option value="2">Government</option>
+
+<option value="3">Student</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Education</label>
+
+<select id="education">
+
+<option value="">Select</option>
+
+<option value="0">High School</option>
+
+<option value="1">Graduate</option>
+
+<option value="2">Post Graduate</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Housing Type</label>
+
+<select id="housing">
+
+<option value="">Select</option>
+
+<option value="0">Owned</option>
+
+<option value="1">Rented</option>
+
+<option value="2">With Parents</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Family Status</label>
+
+<select id="family">
+
+<option value="">Select</option>
+
+<option value="0">Single</option>
+
+<option value="1">Married</option>
+
+<option value="2">Divorced</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Employment Years</label>
+
+<input
+type="number"
+id="experience"
+placeholder="Years"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Credit Score</label>
+
+<input
+type="number"
+id="credit"
+placeholder="300 - 900"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Existing Loan Amount (₹)</label>
+
+<input
+type="number"
+id="loan"
+placeholder="Loan Amount"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Payment History</label>
+
+<select id="history">
+
+<option value="">Select</option>
+
+<option value="1">Good</option>
+
+<option value="0">Poor</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Dependents</label>
+
+<input
+type="number"
+id="children"
+placeholder="No. of Dependents"
+required>
+
+</div>
+
+</div>
+
+<button type="submit">
+
+<i class="fa-solid fa-magnifying-glass-chart"></i>
+
+Predict Approval
+
+</button>
+
+<div class="loader" id="loader">
+
+<div class="spinner"></div>
+
+<p style="margin-top:15px">
+
+Analyzing Applicant...
+
+</p>
+
+</div>
+        <!-- Loading Ends -->
+
+        </form>
+
+        <!-- ================= RESULT CARD ================= -->
+
+        <div class="result" id="resultCard">
+
+            <h2 id="resultTitle">
+                Prediction Result
+            </h2>
+
+            <p>
+
+                <strong>Status :</strong>
+
+                <span id="status">
+
+                    Waiting...
+
+                </span>
+
+            </p>
+
+            <p>
+
+                <strong>Approval Probability :</strong>
+
+                <span id="probability">
+
+                    0%
+
+                </span>
+
+            </p>
+
+            <div class="progress">
+
+                <div
+                    class="bar"
+                    id="probabilityBar">
+                </div>
+
+            </div>
+
+            <br>
+
+            <p>
+
+                <strong>Risk Level :</strong>
+
+                <span id="risk">
+
+                    -
+
+                </span>
+
+            </p>
+
+            <p>
+
+                <strong>Recommended Credit Limit :</strong>
+
+                <span id="limit">
+
+                    ₹0
+
+                </span>
+
+            </p>
+
+            <p>
+
+                <strong>Prediction Time :</strong>
+
+                <span id="time">
+
+                    --
+
+                </span>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= ABOUT ================= -->
+
+<section
+class="section"
+id="about">
+
+<h1 class="title">
+
+About The Project
+
+</h1>
+
+<div class="about-grid">
+
+<div class="about-card">
+
+<h3>
+
+🏦 Project Overview
+
+</h3>
+
+<p>
+
+Banks receive thousands of credit card applications every day.
+This project automates the approval process using Artificial
+Intelligence and Machine Learning, reducing manual effort and
+improving decision accuracy.
+
+</p>
+
+</div>
+
+<div class="about-card">
+
+<h3>
+
+🤖 Machine Learning
+
+</h3>
+
+<p>
+
+The system trains and compares multiple Machine Learning
+algorithms including Logistic Regression, Decision Tree,
+Random Forest and XGBoost.
+
+The best-performing model is automatically selected for
+real-time prediction.
+
+</p>
+
+</div>
+
+<div class="about-card">
+
+<h3>
+
+⚡ Technologies
+
+</h3>
+
+<p>
+
+Python
+
+<br>
+
+Flask
+
+<br>
+
+Scikit-Learn
+
+<br>
+
+XGBoost
+
+<br>
+
+NumPy
+
+<br>
+
+Pandas
+
+<br>
+
+Matplotlib
+
+<br>
+
+HTML
+
+<br>
+
+CSS
+
+<br>
+
+JavaScript
+
+</p>
+
+</div>
+
+<div class="about-card">
+
+<h3>
+
+📊 Prediction Output
+
+</h3>
+
+<p>
+
+✔ Approval / Rejection
+
+<br><br>
+
+✔ Probability Score
+
+<br><br>
+
+✔ Risk Category
+
+<br><br>
+
+✔ Recommended Credit Limit
+
+</p>
+
+</div>
+
+<div class="about-card">
+
+<h3>
+
+🎯 Objectives
+
+</h3>
+
+<p>
+
+• Automate credit approval
+
+<br><br>
+
+• Reduce processing time
+
+<br><br>
+
+• Improve prediction accuracy
+
+<br><br>
+
+• Detect high-risk customers
+
+</p>
+
+</div>
+
+<div class="about-card">
+
+<h3>
+
+💼 Real World Use
+
+</h3>
+
+<p>
+
+Banks can integrate this system into
+their existing workflow to instantly
+evaluate applicants and prioritize
+manual verification only when needed.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= CONTACT ================= -->
+
+<section class="section">
+
+<h1 class="title">
+
+Project Information
+
+</h1>
+
+<div class="dashboard">
+
+<div class="card">
+
+<i class="fa-solid fa-code"></i>
+
+<h3>
+
+Frontend
+
+</h3>
+
+<br>
+
+<p>
+
+HTML
+
+<br>
+
+CSS
+
+<br>
+
+JavaScript
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-server"></i>
+
+<h3>
+
+Backend
+
+</h3>
+
+<br>
+
+<p>
+
+Python Flask
+
+Machine Learning
+
+REST API
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-database"></i>
+
+<h3>
+
+Database
+
+</h3>
+
+<br>
+
+<p>
+
+CSV Dataset
+
+Model.pkl
+
+Prediction History
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-cloud"></i>
+
+<h3>
+
+Deployment
+
+</h3>
+
+<br>
+
+<p>
+
+IBM Watson
+
+GitHub
+
+Flask
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+<h3>
+
+CreditAI
+
+</h3>
+
+<p>
+
+AI Powered Credit Card Approval Prediction System
+
+</p>
+
+<br>
+
+<p>
+
+Developed using Artificial Intelligence,
+Machine Learning,
+Flask,
+XGBoost,
+Scikit-Learn,
+NumPy,
+Pandas and JavaScript.
+
+</p>
+
+<br>
+
+<p>
+
+© 2026 CreditAI | Final Year B.Tech Project
+
+</p>
+
+</footer>
+{
+  "status": "Approved",
+  "probability": 96,
+  "risk": "Low",
+  "limit": "₹2,50,000"
+}
+<script>
+
+// ==========================
+// Animated Counter Function
+// ==========================
+
+function animateValue(id, start, end, duration, suffix = "") {
+
+    let obj = document.getElementById(id);
+
+    let range = end - start;
+
+    let current = start;
+
+    let increment = end > start ? 1 : -1;
+
+    let stepTime = Math.abs(Math.floor(duration / range));
+
+    let timer = setInterval(function () {
+
+        current += increment;
+
+        obj.innerHTML = current.toLocaleString() + suffix;
+
+        if (current == end) {
+
+            clearInterval(timer);
+
+        }
+
+    }, stepTime);
+
+}
+
+animateValue("applicants", 0, 25642, 1500);
+animateValue("approved", 0, 18932, 1500);
+animateValue("rejected", 0, 6710, 1500);
+document.getElementById("accuracy").innerHTML = "98.42%";
+
+
+// ==========================
+// Prediction Form
+// ==========================
+
+const form = document.getElementById("predictionForm");
+
+form.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    document.getElementById("loader").style.display="block";
+
+    document.getElementById("resultCard").style.display="none";
+
+    const data={
+
+        age:Number(document.getElementById("age").value),
+
+        gender:Number(document.getElementById("gender").value),
+
+        income:Number(document.getElementById("income").value),
+
+        employment:Number(document.getElementById("employment").value),
+
+        education:Number(document.getElementById("education").value),
+
+        housing:Number(document.getElementById("housing").value),
+
+        family:Number(document.getElementById("family").value),
+
+        experience:Number(document.getElementById("experience").value),
+
+        credit:Number(document.getElementById("credit").value),
+
+        loan:Number(document.getElementById("loan").value),
+
+        history:Number(document.getElementById("history").value),
+
+        children:Number(document.getElementById("children").value)
+
+    };
+
+    try{
+
+        const response = await fetch("/predict",{
+
+            method:"POST",
+
+            headers:{
+
+                "Content-Type":"application/json"
+
+            },
+
+            body:JSON.stringify(data)
+
+        });
+
+        const result = await response.json();
+
+        document.getElementById("loader").style.display="none";
+
+        document.getElementById("resultCard").style.display="block";
+
+        document.getElementById("status").innerHTML=result.status;
+
+        document.getElementById("probability").innerHTML=result.probability+"%";
+
+        document.getElementById("risk").innerHTML=result.risk;
+
+        document.getElementById("limit").innerHTML=result.limit;
+
+        document.getElementById("time").innerHTML=new Date().toLocaleString();
+
+        document.getElementById("probabilityBar").style.width=result.probability+"%";
+
+        if(result.status.toLowerCase()=="approved"){
+
+            document.getElementById("resultTitle").style.color="#22C55E";
+
+            document.getElementById("probabilityBar").style.background="#22C55E";
+
+        }
+        else{
+
+            document.getElementById("resultTitle").style.color="#EF4444";
+
+            document.getElementById("probabilityBar").style.background="#EF4444";
+
+        }
+
+    }
+
+    catch(error){
+
+        document.getElementById("loader").style.display="none";
+
+        document.getElementById("resultCard").style.display="block";
+
+        document.getElementById("resultTitle").style.color="#EF4444";
+
+        document.getElementById("status").innerHTML="Server Connection Failed";
+
+        document.getElementById("probability").innerHTML="-";
+
+        document.getElementById("risk").innerHTML="-";
+
+        document.getElementById("limit").innerHTML="-";
+
+        document.getElementById("time").innerHTML="-";
+
+        document.getElementById("probabilityBar").style.width="0%";
+
+    }
+
+});
+
+
+// ==========================
+// Scroll Animation
+// ==========================
+
+const cards=document.querySelectorAll(".card,.about-card");
+
+const observer=new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+
+if(entry.isIntersecting){
+
+entry.target.style.opacity="1";
+
+entry.target.style.transform="translateY(0px)";
+
+}
+
+});
+
+});
+
+cards.forEach(card=>{
+
+card.style.opacity="0";
+
+card.style.transform="translateY(40px)";
+
+card.style.transition="0.7s";
+
+observer.observe(card);
+
+});
+
+</script>
+
+</body>
+
+</html>
